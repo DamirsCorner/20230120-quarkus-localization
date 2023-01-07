@@ -50,4 +50,26 @@ class GreetingResourceTest {
              .body(`is`("Hello, world!"))
     }
 
+    @Test
+    fun `returns first supported language in Accept-Language header`() {
+        given()
+          .`when`()
+            .header("Accept-Language", "fr-CH, fr;q=0.9, de;q=0.8, sl;q=0.7, *;q=0.5")
+            .get("/hello")
+          .then()
+             .statusCode(200)
+             .body(`is`("Pozdravljen, svet!"))
+    }
+
+    @Test
+    fun `returns English if no supported language in Accept-Language header`() {
+        given()
+          .`when`()
+            .header("Accept-Language", "fr-CH, fr;q=0.9, de;q=0.8, *;q=0.5")
+            .get("/hello")
+          .then()
+             .statusCode(200)
+             .body(`is`("Hello, world!"))
+    }
+
 }
